@@ -13,16 +13,16 @@ while numero != 7:
         manifestacoes = listarBancoDados(conexao, listar)
 
         if len(manifestacoes) == 0:
-            print('Não tem manifestações')
+            print('Não há manifestações')
         else:
-            print('Manifestsaçõ es encontradas')
+            print('Manifestsações encontradas')
 
             for i in manifestacoes:
-                print('código', i[0], 'autor', i[1], 'categoria', i[2], 'descrição', i[3], 'data e hora', i[4])
+                print('código: ', i[0], '\nautor: ', i[1], '\ncategoria: ', i[2], '\ndescrição: ', i[3], '\n--------------')
 
     elif op == 2:
         pesquisar_categoria = input('Digite a categoria: ')
-        listar_por_categoria = 'select * from manifestacoes where categoria = ' + pesquisar_categoria
+        listar_por_categoria = 'select * from manifestacoes where categoria = "' + pesquisar_categoria + '"'
         manifestacoes = listarBancoDados(conexao, listar_por_categoria)
 
         if len(manifestacoes) == 0:
@@ -31,7 +31,7 @@ while numero != 7:
             print('Manifestsações da categoria', pesquisar_categoria)
 
             for i in manifestacoes:
-                print('código', i[0], 'autor', i[1], 'categoria', i[2], 'descrição', i[3], 'data e hora', i[4])
+                print('código: ', i[0], '\nautor: ', i[1], '\ncategoria: ', i[2], '\ndescrição: ', i[3], '\n--------------')
 
     elif op == 3:
         cod = int(input('Digite o código: '))
@@ -45,17 +45,17 @@ while numero != 7:
             print('A manifestação é:')
 
             for i in manifestacoes:
-                print('código', i[0], 'autor', i[1], 'categoria', i[2], 'descrição', i[3], 'data e hora', i[4])
+                print('código: ', i[0], '\nautor: ', i[1], '\ncategoria: ', i[2], '\ndescrição: ', i[3], '\n--------------')
 
     elif op == 4:
         autor = input('Digite o nome de quem está fazendo a manifestação: ')
         categoria = input('Digite a categoria: ')
         descricao = input('Digite a descrição: ')
 
-        insert = 'insert into manifestacoes(autor, categoria, descricao) values(%s,%s,%s)'
+        inserir = 'insert into manifestacoes(autor, categoria, descricao) values(%s,%s,%s)'
         dados = [autor, categoria, descricao]
 
-        insertNoBancoDados(conexao, insert, dados)
+        insertNoBancoDados(conexao, inserir, dados)
         print('Manifestação adicionada')
 
     elif op == 5:
@@ -67,17 +67,24 @@ while numero != 7:
         atualizar = 'update manifestacoes set autor = %s, categoria = %s, descricao = %s where codigo = %s'
         dados = [novo_autor, nova_categoria, nova_descricao, codigo]
 
-        atualizarBancoDados(conexao, atualizar, dados)
-        print('manifestação atualizada com sucesso')
+        if codigo:
+            atualizarBancoDados(conexao, atualizar, dados)
+            print('Manifestação atualizada com sucesso')
+        else:
+            print('Código não encontrado')
 
     elif op == 6:
         codigo = int(input('Digite o código da manifestação que deve ser deletada: '))
 
-        deletar = 'delete from manifestacoes where codigo = ' + str(codigo)
+        deletar = 'delete from manifestacoes where codigo = %s'
         dados = [codigo]
 
-        excluirBancoDados(conexao, deletar, dados)
-        print('Excluído com sucesso')
+        manifestacoes = excluirBancoDados(conexao, deletar, dados)
+
+        if manifestacoes == 0:
+            print('Código não encontrado')
+        else:
+            print('Manifestação excluída com sucesso')
 
     elif op != 7:
         print('Opção inválida')
