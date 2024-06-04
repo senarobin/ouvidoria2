@@ -59,19 +59,14 @@ while numero != 7:
         print('Manifestação adicionada')
 
     elif op == 5:
-        codigo = int(input('Digite o código da manifestação a ser atualizada: '))
-        novo_autor = input('Digite o novo autor: ')
-        nova_categoria = input('Digite a nova categoria: ')
-        nova_descricao = input('Digite a nova descrição: ')
+        contar_manifestacao = 'set count(*) from manifestações'
 
-        atualizar = 'update manifestacoes set autor = %s, categoria = %s, descricao = %s where codigo = %s'
-        dados = [novo_autor, nova_categoria, nova_descricao, codigo]
 
-        if codigo:
-            atualizarBancoDados(conexao, atualizar, dados)
-            print('Manifestação atualizada com sucesso')
-        else:
-            print('Código não encontrado')
+         manifestacoes = listarBancoDados(conexao, contar_manifestacao)
+
+         quantidade = conatar_manifestacao[0][0]
+
+         print('A quantidade de manifestações é', quantidade)
 
     elif op == 6:
         codigo = int(input('Digite o código da manifestação que deve ser deletada: '))
